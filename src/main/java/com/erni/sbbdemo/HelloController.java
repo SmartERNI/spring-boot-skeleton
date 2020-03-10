@@ -25,6 +25,9 @@ public class HelloController {
         log.debug("Houston, we entered clocks()");
         List<Clock> clocks = new ArrayList<>();
         clocks.add(new Clock("Lausanne", true));
+        clocks.add(new Clock("Lausanne", true));
+        clocks.add(new Clock("Lausanne", true));
+        clocks.add(new Clock("Bern", true));
         //services can query data and services..
         //
         return clocks;
