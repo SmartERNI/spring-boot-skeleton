@@ -3,6 +3,11 @@ package com.erni.sbbdemo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+// Run in a cmd shell (preferably not gitbash, as you can't stop
+// it in gitbash with Ctrl+C) using e.g.
+//
+// mvn spring-boot:run
+//
 @SpringBootApplication
 public class SbbdemoApplication {
 

@@ -1,8 +1,10 @@
 package com.erni.sbbdemo;
 
-import org.junit.jupiter.api.*;
-import com.erni.sbbdemo.*;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.Assert.assertEquals;
 
 class HelloControllerTest {
 
@@ -18,6 +20,6 @@ class HelloControllerTest {
     @Test
     void testHello(){
         //TODO why can't I call static method on HelloController here?
-//        String result = HelloController.
+        assertEquals("check expected greeting",HelloController.GREETING,  HelloController.getGreeting() );
     }
 }
