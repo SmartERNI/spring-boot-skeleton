@@ -1,6 +1,6 @@
 package com.erni.sbbdemo.service;
 
-import com.erni.sbbdemo.Clock;
+import com.erni.sbbdemo.model.Clock;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,10 +1,10 @@
-package com.erni.sbbdemo;
+package com.erni.sbbdemo.model;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@Builder
+@AllArgsConstructor
 public class Clock {
     private String name;
     private boolean isLit;
