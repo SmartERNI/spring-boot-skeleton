@@ -8,6 +8,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class Clock {
     private String name;
+
+    // Override default Jackson property ('lit')
     @JsonProperty("isLit")
     private boolean isLit;
 }
