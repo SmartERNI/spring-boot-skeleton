@@ -19,18 +19,21 @@ import java.util.List;
 @Service
 public class ClockService {
 
+    public static final int ALL_ROWS = -1;
     // See https://data.sbb.ch/explore/dataset/haltestelle-uhr/api for more
+    // Note: getClocks() appends &rows=nnn to this URL
     //
     private static String SBB_CLOCKS_URL = "https://data.sbb.ch/api/records/1.0/search/?dataset=haltestelle-uhr";
 
     @Autowired
     RestTemplate restTemplate;
 
-    public List<Clock> getClocks(){
+    public List<Clock> getClocks(Integer rows){
 
         List<Clock> clockList = new ArrayList<>();
 
-        ClockJson clockJson = restTemplate.getForObject(SBB_CLOCKS_URL,ClockJson.class);
+        log.debug("Requesting data for {} clocks", rows);
+        ClockJson clockJson = restTemplate.getForObject(SBB_CLOCKS_URL+"&rows="+rows,ClockJson.class);
 
         // walk records, make clocks...return clock list
         //
@@ -54,8 +57,9 @@ public class ClockService {
 
     // Useful in case external website returns html data only
     // From https://stackoverflow.com/a/13041033/7409029
+    // todo move to some utility package
     //
-    private RestTemplate getHtmlCompatibleRestTemplate(){
+    private static RestTemplate getHtmlConsumingRestTemplate(){
         RestTemplate restTemplate = new RestTemplate();
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
         Jaxb2RootElementHttpMessageConverter jaxbMessageConverter = new Jaxb2RootElementHttpMessageConverter();

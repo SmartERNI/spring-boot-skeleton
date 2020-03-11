@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -16,25 +17,33 @@ import java.util.List;
 @RestController
 public class HelloController {
 
-    public static final String GREETING = "Heidi hei SBB World!";
+    public static final String GREETING = "Hello from SpringBoot skeleton";
     @Autowired
     private ClockService clockService;
 
     public static String getGreeting(){ return GREETING; }
 
-    //TODO: Controller should delegate to services
-    //
     @GetMapping("/clocks")
-    public List<Clock> getClocks() {
-        log.debug("Houston, we entered clocks()");
-//        List<Clock> clocks = new ArrayList<>();
-//        clocks.add(new Clock("Lausanne", true));
-//        clocks.add(new Clock("Lausanne", true));
-//        clocks.add(new Clock("Lausanne", true));
-//        clocks.add(new Clock("Bern", true));
-//        return clocks;
+    public List<Clock> getClocks(@RequestParam(name="rows") Integer rows) {
+        log.info("Entered clocks() with {} rows", rows);
+        return clockService.getClocks(rows);
+    }
 
-        return clockService.getClocks();
+    @GetMapping("/dummyclocks")
+    public List<Clock> getDummyClocks() {
+        log.debug("Houston, we entered dummyclocks()");
+        List<Clock> clocks = new ArrayList<>();
+        clocks.add(new Clock("Lausanne", true));
+        clocks.add(new Clock("Lausanne", true));
+        clocks.add(new Clock("Lausanne", false));
+        clocks.add(new Clock("Bern", true));
+        return clocks;
+    }
+
+    @GetMapping("/hello")
+    public String getHello() {
+        log.debug("Houston, we entered getHello()");
+        return GREETING;
     }
 
 }
