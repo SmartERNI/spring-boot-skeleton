@@ -24,7 +24,7 @@ public class HelloController {
     public static String getGreeting(){ return GREETING; }
 
     @GetMapping("/clocks")
-    public List<Clock> getClocks(@RequestParam(name="rows") Integer rows) {
+    public List<Clock> getClocks(@RequestParam(name="rows", defaultValue=""+ClockService.ALL_ROWS) Integer rows) {
         log.info("Entered clocks() with {} rows", rows);
         return clockService.getClocks(rows);
     }
