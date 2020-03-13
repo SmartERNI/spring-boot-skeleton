@@ -4,6 +4,7 @@ import com.erni.sbbdemo.model.Clock;
 import com.erni.sbbdemo.service.ClockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,11 @@ public class HelloController {
     public static final String GREETING = "Hello from SpringBoot skeleton";
     @Autowired
     private ClockService clockService;
+
+    // Example of using a property from application.properties file
+    //
+    @Value("${foo.bar.baz:Missing value}")
+    private String fooBarBaz;
 
     public static String getGreeting(){ return GREETING; }
 
@@ -42,7 +48,8 @@ public class HelloController {
 
     @GetMapping("/hello")
     public String getHello() {
-        log.debug("Houston, we entered getHello()");
+        log.info("Houston, we entered getHello()");
+        log.info("fooBarBaz: {}", fooBarBaz);
         return GREETING;
     }
 

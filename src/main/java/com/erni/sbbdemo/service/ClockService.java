@@ -4,6 +4,7 @@ import com.erni.sbbdemo.dto.ClockFields;
 import com.erni.sbbdemo.dto.ClockJson;
 import com.erni.sbbdemo.dto.ClockRecord;
 import com.erni.sbbdemo.model.Clock;
+import com.erni.sbbdemo.util.MiscUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -12,8 +13,7 @@ import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConvert
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -37,17 +37,18 @@ public class ClockService {
 
         // walk records, make clocks...return clock list
         //
-        // TODO how to test with null records list?
-        //
         if(clockJson != null && clockJson.getRecords() != null){
             log.info("Got "+ clockJson.getRecords().size() + " clockrecords");
+            Map<String,Integer> debugClockCounts = new TreeMap<>();
             for(ClockRecord clockRecord : clockJson.getRecords()){
                 ClockFields clockFields = clockRecord.getFields();
-                boolean isLit = "ja".equalsIgnoreCase(clockFields.getBeleuchtung());
                 String bpsName = clockFields.getBps_name();
-                log.info("Adding clock bps: {}, lit: {} ", bpsName, isLit);
+                boolean isLit = "ja".equalsIgnoreCase(clockFields.getBeleuchtung());
+                log.debug("Clock: {}, {} ", bpsName, isLit ? "lit" : "not lit");
                 clockList.add(new Clock(bpsName, isLit));
+                bumpCount(debugClockCounts,bpsName);
             }
+            log.info("Sorted clocks summary: {}", MiscUtils.sortByValue(debugClockCounts));
         }else{
             log.warn ("Got no clockrecords (null returned from jackson)");
         }
@@ -55,19 +56,12 @@ public class ClockService {
         return clockList;
     }
 
-    // Useful in case external website returns html data only
-    // From https://stackoverflow.com/a/13041033/7409029
-    // todo move to some utility package
-    //
-    private static RestTemplate getHtmlConsumingRestTemplate(){
-        RestTemplate restTemplate = new RestTemplate();
-        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
-        Jaxb2RootElementHttpMessageConverter jaxbMessageConverter = new Jaxb2RootElementHttpMessageConverter();
-        List<MediaType> mediaTypes = new ArrayList<>();
-        mediaTypes.add(MediaType.TEXT_HTML);
-        jaxbMessageConverter.setSupportedMediaTypes(mediaTypes);
-        messageConverters.add(jaxbMessageConverter);
-        restTemplate.setMessageConverters(messageConverters);
-        return restTemplate;
+    private static void bumpCount(Map<String, Integer> counts, String bpsName) {
+        int newCount=1;
+        if(counts.containsKey(bpsName)){
+            newCount+=counts.get(bpsName);
+        }
+        counts.put(bpsName,newCount);
     }
+
 }
